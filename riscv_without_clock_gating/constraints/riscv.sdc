@@ -15,6 +15,8 @@ set_clock_transition 0.1 [get_clocks clk]
 # Reset input delay
 set_input_delay 1.0 -clock clk [get_ports reset]
 
+set_output_delay 1.0 -clock clk [all_outputs]
+
 # Reset input transition
 set_input_transition 0.1 [get_ports reset]
 
