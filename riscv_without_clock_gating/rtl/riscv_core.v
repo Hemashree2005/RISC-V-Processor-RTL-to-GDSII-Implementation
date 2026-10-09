@@ -1,6 +1,12 @@
 module riscv_core (
-    input wire clk,
-    input wire reset
+    input  wire        clk,
+    input  wire        reset,
+
+    // Primary outputs added to prevent logic synthesis pruning (GLO-34 optimization)
+    output wire [31:0] pc_out,
+    output wire [31:0] instruction_out,
+    output wire [31:0] alu_result_out,
+    output wire [31:0] write_back_data_out
 );
 
 wire [31:0] pc;
@@ -30,6 +36,16 @@ wire        jump;
 wire [3:0]  alu_control;
 
 wire        zero;
+
+
+// --------------------------------------------------
+// Primary Output Assignments
+// --------------------------------------------------
+
+assign pc_out              = pc;
+assign instruction_out     = instruction;
+assign alu_result_out      = alu_result;
+assign write_back_data_out = write_back_data;
 
 
 // --------------------------------------------------
@@ -126,7 +142,7 @@ assign immediate =
          instruction[31:25],
          instruction[11:7]} :
 
-    (opcode == 7'b1100011) ?
+    (opcode == 7'b1100111) ?
         {{19{instruction[31]}},
          instruction[31],
          instruction[7],
