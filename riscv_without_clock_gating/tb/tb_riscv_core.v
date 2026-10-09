@@ -5,10 +5,20 @@ module tb_riscv_core;
     reg clk;
     reg reset;
 
-    // DUT
+    // DUT output wires
+    wire [31:0] pc;
+    wire [31:0] instruction;
+    wire [31:0] alu_result;
+    wire [31:0] write_back_data;
+
+    // DUT Instantiation
     riscv_core DUT (
         .clk(clk),
-        .reset(reset)
+        .reset(reset),
+        .pc_out(pc),
+        .instruction_out(instruction),
+        .alu_result_out(alu_result),
+        .write_back_data_out(write_back_data)
     );
 
     // Clock: 10 ns period
@@ -30,8 +40,10 @@ module tb_riscv_core;
 
         $display("================================");
         $display("Simulation completed");
-        $display("Final PC          = %h", DUT.pc);
-        $display("Final Instruction = %h", DUT.instruction);
+        $display("Final PC          = %h", pc);
+        $display("Final Instruction = %h", instruction);
+        $display("Final ALU Result  = %h", alu_result);
+        $display("Final WB Data     = %h", write_back_data);
         $display("================================");
 
         $finish;
@@ -41,12 +53,14 @@ module tb_riscv_core;
     always @(posedge clk) begin
 
         $display(
-            "TIME=%0t | CLK=%b | RESET=%b | PC=%h | INSTRUCTION=%h",
+            "TIME=%0t | CLK=%b | RESET=%b | PC=%h | INSTRUCTION=%h | ALU_RESULT=%h | WB_DATA=%h",
             $time,
             clk,
             reset,
-            DUT.pc,
-            DUT.instruction
+            pc,
+            instruction,
+            alu_result,
+            write_back_data
         );
 
     end
